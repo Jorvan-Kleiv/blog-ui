@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+@font-face {
+    font-family: "Inter";
+    src: local("Inter"),
+    url("assets/fonts/Inter/static/Inter_18pt-Regular.ttf") format("TrueType");
+    font-weight: normal;
+    font-style: normal;
+}
+@theme {
+    --font-display: "Inter", "sans serif";
+}
+
+
