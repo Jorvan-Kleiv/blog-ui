@@ -25,12 +25,6 @@ export type Profile = {
     linkedin: string,
     user: User
 } & Common;
-export type Validation = {
-    code: string,
-    expiration_date: Date,
-    user: User,
-
-} & Common;
 export type Article = {
     title: string,
     content: string,

@@ -1,5 +1,5 @@
 <template>
-  <header class="flex bg-white justify-between border-b border-b-slate-200 sticky top-0 z-10 items-center w-full py-[8px]  px-[100px]">
+  <header class="flex bg-white justify-between border-b border-b-slate-200 sticky top-0 z-10 items-center w-full py-[8px] px-4 md:shadow-xs lg:shadow-xs  lg:px-[100px] md:mx-[100px]">
     <div class="flex w-fit flex-col items-center h-fit">
       <div class="bg-violet-400 w-fit text-md px-1 py-0.5 rounded-sm font-bold text-white">
         DB
@@ -8,12 +8,12 @@
     </div>
     <div class="flex justify-between items-center gap-16">
       <SearchInput />
-      <div class="flex justify-between gap-6 items-center w-fit">
-        <button class="w-fit h-fit border-none bg-transparent relative" v-if="useAuthStore().user && !isPublicPage">
+      <div class="flex md:justify-between md:gap-6 gap-4 items-center w-fit">
+        <button class="w-fit h-fit border-none bg-transparent relative" v-if="useAuth.user && !isPublicPage">
           <span class="w-1.5 h-1.5 rounded-full bg-red-600 block absolute right-1"></span>
           <Bell width="20" class="stroke-slate-400" />
         </button>
-        <div class="flex gap-2 items-center" v-if="useAuthStore().user == null || isPublicPage">
+        <div class="flex gap-2 items-center" v-if="useAuth.user == null || isPublicPage">
           <RouterLink to="/login" class="px-[16px] flex items-center hover:bg-slate-100 transition-all duration-200 font-semibold py-[6px] text-[14px] rounded-sm">
             <span>Login</span>
           </RouterLink>
@@ -21,13 +21,13 @@
             Sign up
           </RouterLink>
         </div>
-        <div class="flex gap-2 items-center" v-if="useAuthStore() != null && !isPublicPage">
+        <div class="flex gap-2 items-center" v-if="useAuth.user != null && !isPublicPage">
           <button class="w-8 aspect-square cursor-pointer active:border border-purple-400 rounded-full bg-slate-200" popovertarget="dd-menu"></button>
           <div popover id="dd-menu">
             <div class="flex flex-col gap-1">
               <div class="py-1 flex items-center gap-x-1">
-                <User width="20" class="stroke-slate-400" />
-                <h3 class="text-base text-slate-500 capitalize">{{useAuthStore().user}}</h3>
+                <UserIcon width="20" class="stroke-slate-400" />
+                <h3 class="text-base text-slate-500 capitalize line-clamp-1">{{user.username}}</h3>
               </div>
               <button @click.prevent="useAuthStore().logout()" type="button" class="py-0.5 rounded-sm cursor-pointer text-white active:ring-2 ring-red-200 bg-red-500 font-medium">Logout</button>
             </div>
@@ -41,15 +41,27 @@
 </template>
 <script setup lang="ts">
 import SearchInput from "../../common/SearchInput.vue";
-import {Bell, User} from "lucide-vue-next";
+import {Bell, UserIcon} from "lucide-vue-next";
 import {useAuthStore} from "../../../stores/useAuthStore.ts";
 import {useRoute} from "vue-router";
-import {computed} from "vue";
+import {computed, onMounted, ref} from "vue";
+import {instance} from "../../../axiosInstance.ts";
+import type {User} from "../../../type/types.ts";
 const route = useRoute();
 
 const isPublicPage = computed(() =>
     ['/login', '/register', '/validation'].includes(route.path)
 );
+const user =  ref<User | any>({});
+const useAuth = useAuthStore();
+
+onMounted(() => {
+  instance.get("/user").then((response) => {
+    user.value = response.data.data;
+  });
+})
+
+
 </script>
 
 <style scoped>

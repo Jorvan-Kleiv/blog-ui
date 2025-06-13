@@ -1,7 +1,7 @@
 
 <template>
-  <div class="flex justify-center bg-slate-50 py-8 min-h-screen">
-    <div class="w-md h-fit px-8 py-6 shadow-xs rounded-md bg-white">
+  <div class="flex justify-center md:bg-slate-50 lg:bg-slate-50 py-8 min-h-screen">
+    <div class="w-md h-fit px-8 py-6 md:shadow-xs lg:shadow-xs rounded-md bg-white">
       <form @submit.prevent="handle()">
         <h3 class="text-2xl mb-1.5 mt-1.5 font-bold text-slate-700 text-center">Welcome Back 🖐️</h3>
         <p class="text-xs mb-5 text-slate-400">We're pleased to have you with us again. Let's continue where you left off and move forward together.</p>

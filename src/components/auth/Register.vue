@@ -1,7 +1,7 @@
 
 <template>
-  <div class="flex justify-center bg-slate-50 py-8 min-h-screen">
-    <div class="min-w-md shadow-xs bg-white h-fit px-8 py-6 rounded-md ">
+  <div class="flex justify-center md:bg-slate-50 lg:bg-slate-50 py-8 min-h-screen">
+    <div class="min-w-md md:shadow-xs lg:shadow-xs bg-white h-fit px-8 py-6 rounded-md ">
       <form @submit.prevent="handle()">
         <h3 class="text-2xl my-3 font-bold text-slate-700 text-center">Welcome</h3>
         <div class="flex flex-col w-full gap-2">
