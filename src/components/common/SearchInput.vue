@@ -1,6 +1,6 @@
 <template>
-  <div search class="md:outline lg:outline flex outline-slate-200 focus-within:outline-violet-500 py-1 rounded-full bg-slate-50 gap-1 px-1 items-center lg:w-fit md:w-fit h-fit">
-    <Search width="20" height="20" class="text-purple-500" search-icon color="#cbd5e1"/>
+  <div search class="md:outline  lg:outline flex outline-slate-200 focus-within:outline-violet-500 py-1 rounded-full bg-slate-50 gap-1 px-1 items-center lg:w-fit md:w-fit h-fit">
+    <Search width="20" height="20" class="text-slate-500" search-icon />
     <input type="search" placeholder="Search here..." class="outline-none max-md:w-0 focus:caret-purple-500 placeholder:text-slate-400 border-none flex-grow" />
   </div>
 </template>
@@ -16,5 +16,7 @@ import {Search} from "lucide-vue-next";
     }
   }
 }
+
+
 
 </style>

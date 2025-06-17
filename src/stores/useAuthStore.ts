@@ -6,10 +6,17 @@ import router from "../utils/routing.ts";
 export const useAuthStore = defineStore("useAuthStore", {
     state: () => ({
         user: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")!) : null,
+        trendingAuthors: [] as User[] | undefined,
 
     }),
     getters: {},
     actions: {
+        loadAuthUser() {
+            apiFetch<User>("/user", { method: 'GET' }).then((res) => {
+                this.user = res;
+                localStorage.setItem("user", JSON.stringify(res));
+            })
+        },
         register(payload: User) {
             try {
                 apiFetch<User>("/register", { payload: {...payload} }).then(res => {
@@ -17,7 +24,7 @@ export const useAuthStore = defineStore("useAuthStore", {
                     localStorage.setItem("user", JSON.stringify(res));
                     this.user = res;
                     document.startViewTransition(() => {
-                        router.push('/');
+                        router.push("/")
                     })
                 });
                 console.log("Registered:");
@@ -46,5 +53,13 @@ export const useAuthStore = defineStore("useAuthStore", {
             this.user = null;
             router.push("/login");
         },
+        loadTrendingAuthors()
+        {
+            apiFetch<User[]>("/v1/articles/trending", { method: 'GET' }).then((res) => {
+                console.log(res)
+                this.trendingAuthors = res;
+            })
+        }
     },
+
 })

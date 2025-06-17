@@ -1,19 +1,27 @@
 <template>
   <div class="flex items-center gap-1">
-    <div class="w-8 aspect-square rounded-full bg-slate-200"></div>
+    <div class="w-8 aspect-square text-sm font-bold justify-center flex items-center rounded-full text-white"
+         :style="{backgroundColor: getRandomColor(user?.username)}"
+    >
+      {{ getUserInitials(user) }}
+    </div>
     <div class="flex flex-col">
       <span class="text-sm text-slate-600">
-        Gregor Samsa
+        {{ user?.username }}
       </span>
       <span class="text-xs text-slate-500">
-        Gregorsamsa@gmail.com
+        {{ user?.email }}
       </span>
     </div>
   </div>
 
 </template>
 <script setup lang="ts">
-
+import type { User } from '../../type/types.ts'
+import {getRandomColor, getUserInitials} from "../../utils/UserInitials.ts";
+defineProps<{
+  user: User | undefined | any;
+}>()
 </script>
 
 <style scoped>

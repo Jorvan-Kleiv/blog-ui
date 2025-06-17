@@ -1,7 +1,7 @@
 <template>
-  <div class="md:col-span-2 bg-white shadow-xs pt-6 pb-2 lg:col-span-2 col-span-6 font-display top-10 inset-y- self-start sticky text-sm">
+  <div class="md:col-span-2 bg-white max-md:shadow-xs pt-6 pb-2 lg:col-span-2 col-span-6 font-display top-10 self-start sticky text-sm">
     <div class="flex md:flex-col justify-evenly lg:flex-col gap-2 md:my-6">
-      <button class="flex items-center gap-1 p-0.5 cursor-pointer transition-all rounded-sm" @click="modal.toggleDrawer">
+      <button class="flex items-center gap-1 p-0.5 cursor-pointer transition-all rounded-sm" v-if="route.path =='/'" @click="modal.toggleDrawer">
         <PlusCircleIcon width="16" />
         new article
       </button>

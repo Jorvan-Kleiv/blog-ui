@@ -1,7 +1,9 @@
 <template>
-  <Default>
-    <RouterView />
-  </Default>
+  <div class="max-w-full">
+    <Default>
+      <RouterView />
+    </Default>
+  </div>
 
 
 </template>

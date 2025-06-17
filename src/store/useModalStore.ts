@@ -3,12 +3,12 @@ import {ref} from "vue";
 
 export const modalStore = defineStore('modalStore', {
     state: () => ({
-        showDrawer: ref(false),
+        isOpen: false,
     }),
     getters: {},
     actions: {
         toggleDrawer() {
-            this.showDrawer = !this.showDrawer
+            this.isOpen = !this.isOpen
         }
     },
 })

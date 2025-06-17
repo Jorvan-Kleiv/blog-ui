@@ -1,16 +1,17 @@
 type Common = {
-    id: string | undefined,
-    created_at: Date | undefined,
-    updated_at: Date | undefined
+    id: string,
+    created_at: Date | string | null,
+    updated_at: Date | string | null
 }
+
 export type User = {
     username: string,
-    first_name: string | undefined,
-    last_name: string | undefined,
+    first_name?: string,
+    last_name?: string,
     email: string,
     password: string,
-
 } & Common;
+
 export type Profile = {
     username: string,
     bio: string,
@@ -25,27 +26,31 @@ export type Profile = {
     linkedin: string,
     user: User
 } & Common;
-export type Article = {
-    title: string,
-    content: string,
-    status: string,
-    user: User,
-    image: Image
 
-} & Common;
 export type Image = {
     name: string,
     path: string,
 } & Common;
-export type Tag = {
-    name: string,
-    article: Article,
 
+
+export type Tag = {
+    name: string;
+    article_id?: string;
 } & Common;
+
+export type Article = {
+    title: string,
+    content: string,
+    status: string,
+    owner: User,
+    image: Image,
+    tags?: Tag[]
+} & Common;
+
+
 export type Comment = {
     content: string,
     commentable_type: unknown,
-    commentable_id: unknown,
+    commentable_id: string,
     user: User,
-
 } & Common;
