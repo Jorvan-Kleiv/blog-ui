@@ -15,15 +15,15 @@
         >
           <form @submit.prevent="handleEdit()" enctype="multipart/form-data">
             <div class="flex flex-col w-full gap-2.5 py-6">
-              <Input label="Title" type="text" v-model="articleForm.title" placeholder="Article title"/>
-              <Input type="area" v-model="articleForm.content" label="Content"
+              <Input label="Title" type="text" v-model="updateRequest.title" placeholder="Article title"/>
+              <Input type="area" v-model="updateRequest.content" label="Content"
                      placeholder="Article content"/>
               <Input
                   label="Tags (Beauty, makeup, Dance)"
-                  v-model="articleForm.tags"
+                  v-model="updateRequest.tags"
                   type="taggeable"
                   placeholder="Beauty, makeup, Dance, pictures"/>
-              <Input type="file" v-model="articleForm.image" />
+              <Input type="file" v-model="updateRequest.image" />
               <div class="flex justify-end w-full">
                 <Button label="Update" type="submit" />
               </div>
@@ -81,9 +81,9 @@
     <div class="flex flex-col my-6 gap-3" v-if="article?.tags && article.tags.length > 0">
       <h3 class="text-base font-semibold mb-2 leading-4 text-slate-600">Featured Tags</h3>
       <div class="flex flex-wrap gap-1.5">
-        <button 
-          class="flex py-1.5 bg-slate-50 hover:bg-slate-100 transition-all duration-200 px-3 text-xs text-slate-600 rounded-2xl h-fit border border-slate-200 items-center" 
-          v-for="tag in article.tags" 
+        <button
+          class="flex py-1.5 bg-slate-50 hover:bg-slate-100 transition-all duration-200 px-3 text-xs text-slate-600 rounded-2xl h-fit border border-slate-200 items-center"
+          v-for="tag in article.tags"
           :key="tag.id || tag.name"
         >
           <Hash width="12" height="12" color="#45556c" />
@@ -96,38 +96,46 @@
 </template>
 <script setup lang="ts">
 
-import UserAvatar from "./common/UserAvatar.vue";
+import UserAvatar from "../common/UserAvatar.vue";
 import {Hash, Heart, MessageCircle, Pencil} from "lucide-vue-next";
-import Drawer from "./common/Drawer.vue";
-import {modalStore} from "../store/useModalStore.ts";
-import {onMounted, computed, reactive} from "vue";
-import {useArticleStore} from "../stores/useArticleStore.ts";
+import Drawer from "../common/Drawer.vue";
+import {modalStore} from "../../stores/useModalStore.ts";
+import {onMounted, computed, reactive, watch} from "vue";
+import {useArticleStore} from "../../stores/useArticleStore.ts";
 import {useRoute} from "vue-router";
-import Input from "./common/Input.vue";
-import Button from "./common/Button.vue";
-import CommentSection from "./common/CommentSection.vue";
+import Input from "../common/Input.vue";
+import Button from "../common/Button.vue";
+import CommentSection from "../CommentSection.vue";
 
 let modal = modalStore();
 const route = useRoute();
 let articleStore = useArticleStore();
 let article = computed(() => articleStore.article);
-
-interface ArticleForm {
-  title: string | undefined;
-  content: string | undefined;
-  tags: string | undefined;
-  image: File | null | undefined;
-  status: string | undefined;
+export interface UpdatedForm extends FormData{
+  title: string;
+  content: string;
+  tags: string;
+  image: null,
 }
-
-const articleForm = reactive<ArticleForm | any>({
+const updateRequest = reactive<UpdatedForm | any>({
   title: '',
   content: '',
   tags: '',
   image: null,
-  status: 'Published',
 });
 
+watch(article, (newArticle) => {
+  if (newArticle && typeof newArticle === 'object') {
+    updateRequest.title = newArticle.title || '';
+    updateRequest.content = newArticle.content || '';
+    if (Array.isArray(newArticle.tags)) {
+      updateRequest.tags = newArticle.tags.map(tag => tag.name).join(', ');
+    } else {
+      updateRequest.tags = '';
+    }
+    updateRequest.image = null;
+  }
+}, { immediate: true });
 
 
 onMounted(async () => {
@@ -142,6 +150,21 @@ onMounted(async () => {
     // You could add user notification here
   }
 })
+async function handleEdit() {
+  const form = new FormData();
+  form.append("title", updateRequest.title);
+  form.append("content", updateRequest.content); // ✅ fix
+  form.append("tags", updateRequest.tags);
+
+  if (updateRequest.image instanceof File) {
+    form.append("image", updateRequest.image);
+  }
+
+  form.append("_method", "PUT"); // pour simuler une requête PUT via POST
+
+  await articleStore.updateArticle(route.params.id.toString(), form);
+}
+
 </script>
 <style scoped>
 

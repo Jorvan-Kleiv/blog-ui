@@ -1,7 +1,7 @@
 <template>
   <!-- Input standard -->
   <div class="space-y-1" v-if="['text', 'email', 'password', 'number'].includes(type)">
-    <label :for="label" class="block text-sm font-medium text-slate-700">
+    <label :for="label" class="block text-sm font-medium text-gray-700">
       {{ label + " :" }}
     </label>
     <input

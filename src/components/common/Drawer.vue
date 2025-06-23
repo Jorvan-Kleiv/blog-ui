@@ -16,7 +16,7 @@
         <div
             v-if="isOpen"
             :class="drawerClasses"
-            class="fixed bg-white shadow-xl z-50"
+            class="fixed bg-white resize-x shadow-xl z-50"
         >
           <!-- Header -->
           <div class="flex items-center justify-between p-4 border-b border-gray-200">
@@ -60,22 +60,6 @@ const emit = defineEmits(['close'])
 import { ref, computed } from 'vue'
 import {
   X,
-  PanelLeft,
-  PanelRight,
-  PanelTop,
-  PanelBottom,
-  Home,
-  User,
-  Settings,
-  Mail,
-  Info,
-  CheckCircle,
-  Bell,
-  Calendar,
-  Plus,
-  Download,
-  Share,
-  Trash2
 } from 'lucide-vue-next'
 const position = ref()
 const showFooter = ref(false)
@@ -103,13 +87,13 @@ const drawerClasses = computed(() => {
 
   switch (position.value) {
     case 'left':
-      return `${baseClasses} top-0 left-0 min-h-full overflow-y-auto max-h-screen w-1/2 max-w-[80vw]`
+      return `${baseClasses} top-0 left-0 min-h-full resize-x overflow-y-auto max-h-screen min-w-1/2 `
     case 'right':
-      return `${baseClasses} top-0 right-0 min-h-full overflow-y-auto max-h-screen w-1/2 max-w-[80vw]`
+      return `${baseClasses} top-0 right-0 resize-x min-h-full overflow-y-auto max-h-screen min-w-1/2`
     case 'top':
-      return `${baseClasses} top-0 left-0 w-full h-fit max-h-[80vh]`
+      return `${baseClasses} top-0 left-0 resizable-y w-full h-fit max-h-[80vh]`
     case 'bottom':
-      return `${baseClasses} bottom-0 left-0 w-full h-fit max-h-[80vh]`
+      return `${baseClasses} bottom-0 resizable-y left-0 w-full h-fit max-h-[80vh]`
     default:
       return baseClasses
   }

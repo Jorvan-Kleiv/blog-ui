@@ -42,8 +42,10 @@ export type Article = {
     title: string,
     content: string,
     status: string,
+    is_liked: boolean,
+    likes_count: number,
     owner: User,
-    image: Image,
+    image: Image | null,
     tags?: Tag[]
 } & Common;
 

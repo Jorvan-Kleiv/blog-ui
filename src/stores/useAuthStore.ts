@@ -5,60 +5,64 @@ import router from "../utils/routing.ts";
 
 export const useAuthStore = defineStore("useAuthStore", {
     state: () => ({
-        user: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")!) : null,
+        user: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user") || "null") : null,
         trendingAuthors: [] as User[] | undefined,
 
     }),
     getters: {},
     actions: {
-        loadAuthUser() {
-            apiFetch<User>("/user", { method: 'GET' }).then((res) => {
-                this.user = res;
-                localStorage.setItem("user", JSON.stringify(res));
+       async loadAuthUser() {
+            await apiFetch<User>("/user", { method: 'GET' }).then((res: User | any) => {
+                this.user = res.data;
+                console.log(res.data)
             })
         },
-        register(payload: User) {
+        async register(payload: User | any) {
             try {
-                apiFetch<User>("/register", { payload: {...payload} }).then(res => {
+                await apiFetch<User>("/register", { payload }).then((res: User | any) => {
                     console.log(res.username, res.email,);
-                    localStorage.setItem("user", JSON.stringify(res));
-                    this.user = res;
+                    this.user = res.data;
+                    localStorage.setItem("user", JSON.stringify(res.data));
                     document.startViewTransition(() => {
-                        router.push("/")
+                        router.push("/articles")
                     })
                 });
+                await this.loadAuthUser();
                 console.log("Registered:");
             } catch (error) {
                 console.error("Registration error:", error);
                 throw error;
             }
         },
-        login(payload: User) {
+        async login(payload: User | any) {
             try {
-                apiFetch<User>("/login", { payload: {...payload} }).then((res: User) => {
-                    console.log(res);
-                    localStorage.setItem("user", JSON.stringify(res));
-                    this.user = res;
-                    router.push("/")
-                });
+                const res = await apiFetch<User | any>("/login", { payload: {...payload} });
+                console.log(res);
+                this.user = res.data;
+                localStorage.setItem("user", JSON.stringify(res.data));
+                await router.push("/articles");
                 console.log("Logged in:");
             } catch (error) {
-                console.error("Logged in error:", error);
+                console.error("Login error:", error);
                 throw error;
             }
         },
 
-        logout(){
-            localStorage.removeItem("user");
+        async logout(){
             this.user = null;
-            router.push("/login");
+            localStorage.removeItem("user");
+            await router.push("/sign-in");
         },
-        loadTrendingAuthors()
+        async loadTrendingAuthors()
         {
-            apiFetch<User[]>("/v1/articles/trending", { method: 'GET' }).then((res) => {
-                console.log(res)
-                this.trendingAuthors = res;
-            })
+            try {
+                const res = await apiFetch<User[] | any>("/v1/articles/trending", { method: 'GET' });
+                console.log(res);
+                this.trendingAuthors = res.data;
+            } catch (error) {
+                console.error("Error loading trending authors:", error);
+                throw error;
+            }
         }
     },
 

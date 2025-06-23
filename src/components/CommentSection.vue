@@ -655,7 +655,7 @@ const dislikeComment = (commentId, isReply = false, parentId = null) => {
 
 const replyToComment = (comment) => {
   // Store the original comment and its parent ID if it's a reply
-  replyingTo.value = { 
+  replyingTo.value = {
     ...comment,
     // If this is a reply to a reply, we need to track the parent comment ID
     isReply: comment.hasOwnProperty('isReply') ? comment.isReply : false,

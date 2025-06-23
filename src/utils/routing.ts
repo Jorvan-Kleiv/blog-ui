@@ -1,22 +1,24 @@
 import {createRouter, createWebHistory} from 'vue-router'
 
-import Articles from '../components/Articles.vue';
-import Article from "../components/Article.vue";
-import Login from "../components/auth/Login.vue";
-import Register from "../components/auth/Register.vue";
-import Settings from "../components/Settings.vue";
-import {ref} from "vue";
-import Profile from "../components/Profile.vue";
+import Articles from '../components/pages/Articles.vue';
+import Article from "../components/pages/Article.vue";
+import Login from "../components/pages/auth/Login.vue";
+import Register from "../components/pages/auth/Register.vue";
+import Settings from "../components/pages/Settings.vue";
+import Profile from "../components/pages/Profile.vue";
+import LandingPage from "../components/pages/LandingPage.vue";
 import {useAuthStore} from "../stores/useAuthStore.ts";
 
 const routes = [
-    { path: '/login', component: Login},
-    { path: '/register', component: Register},
-    {path: '/profile', component: Profile},
-    {path: '/settings', component: Settings},
-    { path: '/', name: "articles", component: Articles},
-    { path: '/article/:id',name: "article", component: Article, props: true },
-]
+    { path: "/", component: LandingPage, meta: { layout: "guest" } },
+    { path: "/sign-in", component: Login, meta: { layout: "guest" } },
+    { path: "/sign-up", component: Register, meta: { layout: "guest" } },
+    { path: "/articles", name: "articles", component: Articles, meta: { layout: "auth" } },
+    { path: "/articles/article/:id", name: "article", component: Article, props: true, meta: { layout: "auth" } },
+    { path: "/profile", component: Profile, meta: { layout: "auth" } },
+    { path: "/settings", component: Settings, meta: { layout: "auth" } },
+];
+
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -24,14 +26,20 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to) => {
-    const user = ref({})
     const authStore = useAuthStore()
-    authStore.loadAuthUser();
-    user.value = authStore.user;
-    const publicPages = ['/', '/article/*', '/login', '/register'];
-    const authRequired = !publicPages.includes(to.path);
-    if (authRequired && user.value == null) {
-        return router.push('/login');
+    try {
+        await authStore.loadAuthUser();
+    } catch (e) {
+        console.error("Error loading user:", e);
     }
-})
+
+    const publicPages = ['/', '/articles', '/sign-in', '/sign-up'];
+    const authRequired = !publicPages.includes(to.path);
+
+    if (authRequired && !authStore.user) {
+        return '/sign-in';
+    }
+
+    return true;
+});
 export default router;

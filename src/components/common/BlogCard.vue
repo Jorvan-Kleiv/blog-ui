@@ -2,7 +2,7 @@
   <RouterLink
       v-for="article in articles"
       :key="article?.id"
-      :to="`/article/${article?.id}`"
+      :to="`/articles/article/${article?.id}`"
       class="flex flex-col cursor-pointer not-last:border-b border-b-slate-200 pb-1.5 h-fit w-fit"
   >
     <div class="grid grid-cols-6 h-fit gap-[20px]">
@@ -15,6 +15,7 @@
         </p>
       </div>
       <div class="col-span-2 flex justify-end" v-if="article.image != null">
+
         <div class="w-32 h-32 rounded-sm bg-slate-300">
           <img :src="article.image.path" alt="" class="w-32 h-32 rounded-sm">
         </div>
@@ -22,14 +23,31 @@
     </div>
     <div class="flex items-end w-full py-0.5 mt-2 justify-between gap-2">
       <UserAvatar :user="article?.owner" />
-      <span class="text-xs text-slate-500">{{ article?.created_at }}</span>
+      <div class="flex w-fit gap-x-6 items-center">
+        <div class="flex items-center gap-1.5">
+          <button class="w-fit h-fit flex items-center" @click.prevent="handleLike(article?.id)">
+            <Heart class="h-5 w-5" :class="article?.is_liked ? 'text-pink-400 fill-pink-400' : 'text-slate-500'" />
+          </button>
+          <p class="text-sm text-slate-500" >
+            {{ article?.likes_count }}
+          </p>
+        </div>
+        <span class="text-xs text-slate-500">{{ article?.created_at }}</span>
+      </div>
     </div>
   </RouterLink>
 </template>
 <script setup lang="ts">
 import type {Article} from "../../type/types.ts";
 import UserAvatar from "./UserAvatar.vue";
+import { Heart } from "lucide-vue-next";
+import {useArticleStore} from "../../stores/useArticleStore.ts";
+let store = useArticleStore();
+
 defineProps<{ articles?: Article[] }>();
+const handleLike = async (articleId: string) => {
+  await store.like(articleId);
+}
 </script>
 
 <style scoped>

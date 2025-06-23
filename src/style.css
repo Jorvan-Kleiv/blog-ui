@@ -1,14 +1,14 @@
 @import "tailwindcss";
-
+html, body {
+    scroll-behavior: smooth;
+}
 @font-face {
-    font-family: "Inter";
-    src: local("Inter"),
-    url("assets/fonts/Inter/static/Inter_18pt-Regular.ttf") format("TrueType");
-    font-weight: normal;
-    font-style: normal;
+    font-family: "Geist";
+    src: local("Geist"),
+    url("assets/fonts/Geist/Geist-VariableFont_wght.ttf") format("TrueType");
 }
 @theme {
-    --font-display: "Inter", "sans serif";
+    --font-general: "Geist", "sans serif";
 }
 
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="col-span-6 py-[24px]">
+  <div class="col-span-6 py-6">
     <div class="flex gap-4 flex-col h-full w-full">
           <Drawer
               header="Add new article"
@@ -27,7 +27,7 @@
     </div>
   </div>
 
-  <div class="col-span-4 py-[24px]">
+  <div class="col-span-4 py-6">
     <div class="grid grid-cols-4">
       <div class="col-span-3 gap-1 rounded-sm bg-slate-900/70 flex flex-col h-fit p-2">
         <h5 class="text-sm text-white leading-5 font-semibold">
@@ -68,18 +68,18 @@
 </template>
 
 <script setup lang="ts">
-import UserAvatar from "./common/UserAvatar.vue";
+import UserAvatar from "../common/UserAvatar.vue";
 import { Plus } from "lucide-vue-next";
 import { Hash } from "lucide-vue-next";
-import Drawer from "./common/Drawer.vue";
+import Drawer from "../common/Drawer.vue";
 import { onMounted, reactive, computed } from "vue";
-import { modalStore } from "../store/useModalStore.ts";
-import Input from "./common/Input.vue";
-import Button from "./common/Button.vue";
-import BlogCard from "./common/BlogCard.vue";
-import type { Article } from "../type/types.ts";
-import { useArticleStore } from "../stores/useArticleStore.ts";
-import {useAuthStore} from "../stores/useAuthStore.ts";
+import { modalStore } from "../../stores/useModalStore.ts";
+import Input from "../common/Input.vue";
+import Button from "../common/Button.vue";
+import BlogCard from "../common/BlogCard.vue";
+import { useArticleStore } from "../../stores/useArticleStore.ts";
+import {useAuthStore} from "../../stores/useAuthStore.ts";
+import type {Article} from "../../type/types.ts";
 
 const modal = modalStore();
 const articleStore = useArticleStore();
@@ -87,32 +87,43 @@ const userStore = useAuthStore()
 const trends = computed(() => userStore.trendingAuthors);
 const articles = computed(() => articleStore.articles);
 
-// const uniqueTags = computed(() => {
-//   if (!articles.value) return [];
-//   const allTags: string[] = [];
-//   articles.value.forEach(article => {
-//     if (article.tags && Array.isArray(article.tags)) {
-//       allTags.push(...article.tags);
-//     }
-//   });
-//   return [...new Set(allTags)];
-// });
+const uniqueTags = computed(() => {
+  if (!articles.value) return [];
+  const allTags: string[] = [];
+  articles.value.forEach((article: Article) => {
+    if (article.tags && Array.isArray(article.tags)) {
+      article.tags.forEach(tag => {
+        allTags.push(tag.name);
+      })
+    }
+  });
+  return [...new Set(allTags)];
+});
 
 onMounted(() => {
   articleStore.loadArticles();
   userStore.loadTrendingAuthors();
 });
-
-const articleForm = reactive<Article | Record<string, unknown>>({
+export interface CreateForm extends FormData{
+  title: string;
+  content: string;
+  tags: string;
+  image: null,
+}
+const articleForm = reactive<CreateForm | any >({
   title: '',
   content: '',
   tags: '',
   image: null,
-  status: 'published',
 });
 
 const handle = () => {
-  articleStore.storeArticle(articleForm);
+  const form = new FormData()
+  form.append("title", articleForm.title)
+  form.append("content", articleForm.content)
+  form.append("tags", articleForm.tags)
+  form.append("image", articleForm.image)
+  articleStore.storeArticle(form);
   console.log(articleForm)
   modal.toggleDrawer();
 };
