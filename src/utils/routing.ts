@@ -1,16 +1,15 @@
 import {createRouter, createWebHistory} from 'vue-router'
-
+import Landing from "../components/pages/home/Landing.vue";
 import Articles from '../components/pages/Articles.vue';
 import Article from "../components/pages/Article.vue";
 import Login from "../components/pages/auth/Login.vue";
 import Register from "../components/pages/auth/Register.vue";
 import Settings from "../components/pages/Settings.vue";
 import Profile from "../components/pages/Profile.vue";
-import LandingPage from "../components/pages/LandingPage.vue";
 import {useAuthStore} from "../stores/useAuthStore.ts";
 
 const routes = [
-    { path: "/", component: LandingPage, meta: { layout: "guest" } },
+    { path: "/", component: Landing, meta: { layout: "guest" } },
     { path: "/sign-in", component: Login, meta: { layout: "guest" } },
     { path: "/sign-up", component: Register, meta: { layout: "guest" } },
     { path: "/articles", name: "articles", component: Articles, meta: { layout: "auth" } },

@@ -110,7 +110,7 @@ import type {Tag} from "../../type/types.ts";
 
 const props = defineProps<{
   type: string;
-  modelValue?: unknown;
+  modelValue?: any;
   label?: string;
   placeholder?: string;
 }>();
