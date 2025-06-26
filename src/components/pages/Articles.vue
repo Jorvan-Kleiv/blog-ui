@@ -71,7 +71,7 @@
 import UserAvatar from "../common/UserAvatar.vue";
 import { Plus } from "lucide-vue-next";
 import { Hash } from "lucide-vue-next";
-import Drawer from "../common/Drawer.vue";
+import Drawer from "../modal/Drawer.vue";
 import { onMounted, reactive, computed } from "vue";
 import { modalStore } from "../../stores/useModalStore.ts";
 import Input from "../common/Input.vue";
