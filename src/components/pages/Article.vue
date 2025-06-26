@@ -73,7 +73,7 @@
       <h3 class="text-base font-semibold mb-2 leading-4 text-slate-600">Author: </h3>
       <div class="flex flex-col gap-4">
         <div class="flex justify-start items-center">
-          <UserAvatar :user="article.owner" v-if="article?.owner"/>
+          <UserAvatar :user="article?.owner" v-if="article?.owner"/>
         </div>
       </div>
     </div>
