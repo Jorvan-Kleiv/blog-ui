@@ -77,13 +77,13 @@
 </template>
 
 <script setup lang="ts">
-import SearchInput from '../../common/SearchInput.vue';
+import SearchInput from "./SearchInput.vue";
 import { Bell, UserIcon } from 'lucide-vue-next';
-import { useAuthStore } from '../../../stores/useAuthStore.ts';
+import {useAuthStore} from "../../stores/useAuthStore.ts";
 import { useRoute } from 'vue-router';
 import { computed, onMounted, ref } from 'vue';
-import type { User } from '../../../type/types.ts';
-import {getRandomColor, getUserInitials} from "../../../utils/UserInitials.ts";
+import type { User } from "../../type/types";
+import {getRandomColor, getUserInitials} from "../../utils/UserInitials.ts";
 
 const route = useRoute();
 const isPublicPage = computed(() => ['/login', '/register', '/validation'].includes(route.path));

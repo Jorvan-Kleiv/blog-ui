@@ -1,11 +1,11 @@
 import {defineStore} from "pinia";
-import type {Article} from "../type/types.ts";
 import {apiFetch} from "../axiosInstance.ts";
+import type {Article} from "../type/types.ts";
 
 export const useArticleStore = defineStore("useArticleStore", {
     state: () => ({
         articles: [] as Article[] | any,
-        article: {} as Article | Record<string, unknown>,
+        article: {} as Article | any
     }),
     getters: {
 

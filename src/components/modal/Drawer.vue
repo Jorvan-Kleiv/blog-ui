@@ -1,3 +1,67 @@
+<script setup lang="ts">
+const emit = defineEmits(['close'])
+import { ref, computed } from 'vue'
+import {
+  X,
+} from 'lucide-vue-next'
+const position = ref()
+const showFooter = ref(false)
+
+const props = defineProps({
+  position: {
+    type: String,
+    default: 'bottom',
+  },
+  header: {
+    type: String,
+    required: true,
+    default: 'Insane',
+  },
+  isOpen: {
+    type: Boolean,
+    default: false,
+  }
+})
+position.value = props.position
+
+// Classes CSS dynamiques
+const drawerClasses = computed(() => {
+  const baseClasses = 'transition-all duration-300 ease-in-out'
+
+  switch (position.value) {
+    case 'left':
+      return `${baseClasses} top-0 left-0 min-h-full resize-x overflow-y-auto max-h-screen min-w-1/2 `
+    case 'right':
+      return `${baseClasses} top-0 right-0 resize-x min-h-full overflow-y-auto max-h-screen min-w-1/2`
+    case 'top':
+      return `${baseClasses} top-0 left-0 resizable-y w-full h-fit max-h-[80vh]`
+    case 'bottom':
+      return `${baseClasses} bottom-0 resizable-y left-0 w-full h-fit max-h-[80vh]`
+    default:
+      return baseClasses
+  }
+})
+
+
+// Function to close the drawer
+const closeDrawer = () => {
+  emit('close')
+}
+
+// Fermeture avec la touche Escape
+const handleKeydown = (event: HTMLElementEventMap['keydown']) => {
+  if (event.key === 'Escape' && props.isOpen) {
+    closeDrawer()
+  }
+}
+
+// Écouter les événements clavier
+if (typeof window !== 'undefined') {
+  window.addEventListener('keydown', handleKeydown)
+}
+
+</script>
+
 <template>
   <div>
     <!-- Composant Drawer -->
@@ -55,69 +119,6 @@
   </div>
 </template>
 
-<script setup>
-const emit = defineEmits(['close'])
-import { ref, computed } from 'vue'
-import {
-  X,
-} from 'lucide-vue-next'
-const position = ref()
-const showFooter = ref(false)
-
-const props = defineProps({
-  position: {
-    type: String,
-    default: 'bottom',
-  },
-  header: {
-    type: String,
-    required: true,
-    default: 'Insane',
-  },
-  isOpen: {
-    type: Boolean,
-    default: false,
-  }
-})
-position.value = props.position
-
-// Classes CSS dynamiques
-const drawerClasses = computed(() => {
-  const baseClasses = 'transition-all duration-300 ease-in-out'
-
-  switch (position.value) {
-    case 'left':
-      return `${baseClasses} top-0 left-0 min-h-full resize-x overflow-y-auto max-h-screen min-w-1/2 `
-    case 'right':
-      return `${baseClasses} top-0 right-0 resize-x min-h-full overflow-y-auto max-h-screen min-w-1/2`
-    case 'top':
-      return `${baseClasses} top-0 left-0 resizable-y w-full h-fit max-h-[80vh]`
-    case 'bottom':
-      return `${baseClasses} bottom-0 resizable-y left-0 w-full h-fit max-h-[80vh]`
-    default:
-      return baseClasses
-  }
-})
-
-
-// Function to close the drawer
-const closeDrawer = () => {
-  emit('close')
-}
-
-// Fermeture avec la touche Escape
-const handleKeydown = (event) => {
-  if (event.key === 'Escape' && props.isOpen) {
-    closeDrawer()
-  }
-}
-
-// Écouter les événements clavier
-if (typeof window !== 'undefined') {
-  window.addEventListener('keydown', handleKeydown)
-}
-</script>
-
 <style scoped>
 /* Animations pour l'overlay */
 .overlay-enter-active,
@@ -174,4 +175,5 @@ if (typeof window !== 'undefined') {
 .drawer-bottom-leave-to {
   transform: translateY(100%);
 }
+
 </style>

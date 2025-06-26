@@ -57,7 +57,6 @@
             55
           </div>
         </div>
-        <CommentSection />
       </div>
     </div>
   </div>
@@ -98,14 +97,14 @@
 
 import UserAvatar from "../common/UserAvatar.vue";
 import {Hash, Heart, MessageCircle, Pencil} from "lucide-vue-next";
-import Drawer from "../common/Drawer.vue";
 import {modalStore} from "../../stores/useModalStore.ts";
 import {onMounted, computed, reactive, watch} from "vue";
 import {useArticleStore} from "../../stores/useArticleStore.ts";
 import {useRoute} from "vue-router";
 import Input from "../common/Input.vue";
 import Button from "../common/Button.vue";
-import CommentSection from "../CommentSection.vue";
+import Drawer from "../modal/Drawer.vue";
+import type {Tag} from "../../type/types.ts";
 
 let modal = modalStore();
 const route = useRoute();
@@ -129,7 +128,7 @@ watch(article, (newArticle) => {
     updateRequest.title = newArticle.title || '';
     updateRequest.content = newArticle.content || '';
     if (Array.isArray(newArticle.tags)) {
-      updateRequest.tags = newArticle.tags.map(tag => tag.name).join(', ');
+      updateRequest.tags = newArticle.tags.map((tag: Tag | any) => tag?.name).join(', ');
     } else {
       updateRequest.tags = '';
     }
